@@ -9,3 +9,99 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  Male
+  Female
+  LGBTQ
+}
+
+enum Role {
+  Client
+  Photographer
+}
+
+enum RequestStatus {
+  Pending
+  Cancelled
+  Ongoing
+  Completed
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  firstName    String        @map("first_name")
+  lastName     String        @map("last_name")
+  email        String        @unique
+  password     String
+  gender       Gender
+  role         Role
+  profileImage String?       @map("profile_image")
+  profileInfo  String?
+  province     String
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  works        Work[]
+  workRequests WorkRequest[]
+  reviews      Review[]
+
+  @@map("users")
+}
+
+model Work {
+  id                 Int           @id @default(autoincrement())
+  description        String
+  firstAvailableDate DateTime      @map("first_available_date") @db.Timestamp(0)
+  lastAvailableDate  DateTime      @map("last_available_date") @db.Timestamp(0)
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  deletedAt          DateTime?     @map("deleted_at") @db.Timestamp(0)
+  user               User          @relation(fields: [photographerId], references: [id])
+  photographerId     Int
+  workImages         WorkImage[]
+  workRequests       WorkRequest[]
+
+  @@map("works")
+}
+
+model WorkImage {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String   @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  work      Work     @relation(fields: [workId], references: [id])
+  workId    Int
+
+  @@map("work_images")
+}
+
+model WorkRequest {
+  id                Int           @id @default(autoincrement())
+  status            RequestStatus @default(Pending)
+  description       String?
+  date              DateTime      @db.Timestamp(0)
+  clientMobile      String        @map("client_mobile")
+  clientSocialMedia String?       @map("client_social_media")
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  deletedAt         DateTime?     @map("deleted_at") @db.Timestamp(0)
+  user              User          @relation(fields: [clientId], references: [id])
+  clientId          Int
+  work              Work          @relation(fields: [workId], references: [id])
+  workId            Int
+  reviews           Review[]
+
+  @@map("work_requests")
+}
+
+model Review {
+  id            Int         @id @default(autoincrement())
+  content       String?
+  rating        Int         @db.UnsignedTinyInt
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  workRequest   WorkRequest @relation(fields: [workRequestId], references: [id])
+  workRequestId Int
+
+  @@map("reviews")
+}
