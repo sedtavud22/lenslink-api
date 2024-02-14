@@ -11,24 +11,26 @@ exports.createWork = catchAsync(async (req, res, next) => {
   if (req.user.role !== USER_ROLE.Photographer) {
     createError("Only photographers can create work", 403);
   }
-  console.log("hfdhhre");
+
+  const workData = { ...req.body, photographerId: req.user.id };
+
+  const newWork = await workService.createWork(workData);
+
   const imgData = [];
   for (const file of req.files) {
-    const res = await uploadService.upload(file.path);
-    imgData.push({ imageName: file.filename, imageUrl: res });
+    const result = await uploadService.upload(file.path);
+    imgData.push({
+      imageName: file.filename.split(".")[0],
+      imageUrl: result,
+      workId: newWork.id,
+    });
     fs.unlink(file.path);
-    console.log("inloop", imgData);
   }
 
-  console.log("outloop", imgData);
-  // console.log("body", req.body);
-  // console.log("file", req.files);
-  // const workData = { ...req.body, photographerId: req.user.id };
+  await workImageService.createWorkImage(imgData);
 
-  // const work = await workService.createWork(workData)
-  // console.log('aftercreatework',work)
-
-  // const workImg = await workImageService.createWorkImage()
+  const work = await workService.findWorkAndWorkImageByWorkId(newWork.id);
+  res.status(201).json({ work });
 });
 
 exports.getAllWorks = catchAsync(async (req, res, next) => {});
