@@ -22,6 +22,7 @@ exports.register = catchAsync(async (req, res, next) => {
   req.body.password = await hashService.hash(req.body.password);
 
   const user = await userService.createUser(req.body);
+  delete user.password;
   res.status(201).json({ user });
 });
 

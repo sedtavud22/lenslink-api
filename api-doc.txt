@@ -33,3 +33,25 @@ RESPONSE
 200 { user: {user obj without password} }
 401 { message: 'unauthenticated'}
 500 { message: 'internal server error'}
+
+POST /works         Create new work
+HEADER
+  AUTHORIZATION     Bearer [JWT]     
+REQUEST BODY        multipart/form-data
+  description         String
+  firstAvailableDate  Date
+  lastAvailableDate   Date
+  imageUrl            String (at least one image)  
+  imageName           String (at least one image)
+RESPONSE
+  201 { work: new work object}
+  400 { message: 'invalid input'}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}
+
+GET /works          Get all works
+RESPONSE
+  200 { works: [work object]}
+  401 { message: 'unauthenticated'}
+  500 { message: 'internal server error'} 

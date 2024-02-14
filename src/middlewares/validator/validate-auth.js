@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const validate = require("./validator");
+const { validate } = require("./validator");
 
 const registerSchema = Joi.object({
   firstName: Joi.string().trim().required().messages({
