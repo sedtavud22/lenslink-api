@@ -6,16 +6,19 @@ const upload = require("../middlewares/upload");
 const {
   validateCreateWork,
 } = require("../middlewares/validator/validate-work");
-const { validateImage } = require("../middlewares/validator/validator");
+const { validateMainImage } = require("../middlewares/validator/validator");
 
 const router = express.Router();
 
 router.post(
   "/",
   authenticate,
-  upload.array("imageUrl", 4),
+  upload.fields([
+    { name: "mainImage", maxCount: 1 },
+    { name: "subImages", maxCount: 3 },
+  ]),
   validateCreateWork,
-  validateImage,
+  validateMainImage,
   workController.createWork
 );
 router.get("/", workController.getAllWorks);

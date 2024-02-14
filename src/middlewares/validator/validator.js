@@ -10,10 +10,8 @@ exports.validate = (schema) => (req, res, next) => {
   next();
 };
 
-exports.validateImage = (req, res, next) => {
-  const { files } = req;
-
-  if (!files) {
+exports.validateMainImage = (req, res, next) => {
+  if (!req.files.mainImage) {
     createError("At least one image is required", 400);
   }
   next();

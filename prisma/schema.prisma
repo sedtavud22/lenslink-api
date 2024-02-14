@@ -51,6 +51,8 @@ model User {
 model Work {
   id                 Int           @id @default(autoincrement())
   description        String
+  mainImageUrl       String        @map("main_image_url")
+  mainImageKey       String        @map("main_image_key")
   firstAvailableDate DateTime      @map("first_available_date") @db.Timestamp(0)
   lastAvailableDate  DateTime      @map("last_available_date") @db.Timestamp(0)
   createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
@@ -67,7 +69,7 @@ model Work {
 model WorkImage {
   id        Int      @id @default(autoincrement())
   imageUrl  String   @map("image_url")
-  imageName String   @map("image_name")
+  publicKey String   @map("public_key")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
   work      Work     @relation(fields: [workId], references: [id])

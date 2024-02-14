@@ -13,3 +13,10 @@ exports.findWorkAndWorkImageByWorkId = (id) =>
       },
     },
   });
+
+exports.findAllWorks = () =>
+  prisma.work.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
