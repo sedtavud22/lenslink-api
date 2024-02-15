@@ -1,3 +1,4 @@
+const { REQUEST_STATUS } = require("../constants");
 const requestService = require("../services/request-service");
 const workService = require("../services/work-service");
 const catchAsync = require("../utils/catch-async");
@@ -47,10 +48,74 @@ exports.sendRequest = catchAsync(async (req, res, next) => {
   res.status(201).json({ request });
 });
 
-exports.acceptRequest = catchAsync(async (req, res, next) => {});
+exports.acceptRequest = catchAsync(async (req, res, next) => {
+  const pendingRequest =
+    await requestService.findPendingRequestByPhotographerIdAndWorkId(
+      req.user.id,
+      req.workId
+    );
 
-exports.rejectRequest = catchAsync(async (req, res, next) => {});
+  if (!pendingRequest) {
+    createError("work request does not exist", 400);
+  }
 
-exports.cancelRequest = catchAsync(async (req, res, next) => {});
+  const request = await requestService.updateRequestStatus(
+    REQUEST_STATUS.Ongoing,
+    pendingRequest.id
+  );
+  res.status(200).json({ request });
+});
 
-exports.completeRequest = catchAsync(async (req, res, next) => {});
+exports.rejectRequest = catchAsync(async (req, res, next) => {
+  const pendingRequest =
+    await requestService.findPendingRequestByPhotographerIdAndWorkId(
+      req.user.id,
+      req.workId
+    );
+
+  if (!pendingRequest) {
+    createError("work request does not exist", 400);
+  }
+
+  const request = await requestService.updateRequestStatus(
+    REQUEST_STATUS.Rejected,
+    pendingRequest.id
+  );
+  res.status(200).json({ request });
+});
+
+exports.cancelRequest = catchAsync(async (req, res, next) => {
+  const pendingRequest =
+    await requestService.findPendingRequestByClientIdAndWorkId(
+      req.user.id,
+      req.workId
+    );
+
+  if (!pendingRequest) {
+    createError("work request does not exist", 400);
+  }
+
+  const request = await requestService.updateRequestStatus(
+    REQUEST_STATUS.Cancelled,
+    pendingRequest.id
+  );
+  res.status(200).json({ request });
+});
+
+exports.completeRequest = catchAsync(async (req, res, next) => {
+  const pendingRequest =
+    await requestService.findOngoingRequestByClientIdAndWorkId(
+      req.user.id,
+      req.workId
+    );
+
+  if (!pendingRequest) {
+    createError("work request does not exist", 400);
+  }
+
+  const request = await requestService.updateRequestStatus(
+    REQUEST_STATUS.Completed,
+    pendingRequest.id
+  );
+  res.status(200).json({ request });
+});

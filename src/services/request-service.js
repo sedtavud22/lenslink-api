@@ -27,4 +27,46 @@ exports.findOngoingAndCompletedRequestsDateByWorkId = (workId) =>
     },
   });
 
+exports.findPendingRequestByClientIdAndWorkId = (clientId, workId) =>
+  prisma.workRequest.findFirst({
+    where: {
+      status: REQUEST_STATUS.Pending,
+      clientId,
+      workId,
+    },
+  });
+
+exports.findPendingRequestByPhotographerIdAndWorkId = (
+  photographerId,
+  workId
+) =>
+  prisma.workRequest.findFirst({
+    where: {
+      status: REQUEST_STATUS.Pending,
+      workId,
+      work: {
+        photographerId,
+      },
+    },
+  });
+
+exports.findOngoingRequestByClientIdAndWorkId = (clientId, workId) =>
+  prisma.workRequest.findFirst({
+    where: {
+      status: REQUEST_STATUS.Ongoing,
+      clientId,
+      workId,
+    },
+  });
+
 exports.createRequest = (data) => prisma.workRequest.create({ data });
+
+exports.updateRequestStatus = (status, id) =>
+  prisma.workRequest.update({
+    data: {
+      status,
+    },
+    where: {
+      id,
+    },
+  });
