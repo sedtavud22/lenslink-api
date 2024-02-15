@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { validate } = require("./validator");
+const { validate, workIdValidator } = require("./validator");
 
 const workSchema = Joi.object({
   description: Joi.string().required().messages({
@@ -19,4 +19,10 @@ const workSchema = Joi.object({
     }),
 });
 
+const workIdSchema = Joi.object({
+  workId: Joi.number().positive().required(),
+});
+
 exports.validateCreateWork = validate(workSchema);
+
+exports.validateWorkId = workIdValidator(workIdSchema);

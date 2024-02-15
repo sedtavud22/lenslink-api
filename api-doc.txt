@@ -55,3 +55,17 @@ RESPONSE
   200 { works: [work object]}
   401 { message: 'unauthenticated'}
   500 { message: 'internal server error'} 
+
+POST    /requests/works/:workId           send work request
+PATCH   /requests/works/:workId/accept    accept work request 
+PATCH   /requests/works/:workId/reject    reject work request
+PATCH   /requests/works/:workId/cancel    cancel work request
+PATCH   /requests/works/:workId/complete  complete work request
+HEADER
+  AUTHORIZATION     Bearer [JWT]
+RESPONSE
+  200 { request: {request object}}
+  400 { message: 'invalid work status'}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}

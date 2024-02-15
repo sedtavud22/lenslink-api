@@ -23,6 +23,7 @@ enum Role {
 
 enum RequestStatus {
   Pending
+  Rejected
   Cancelled
   Ongoing
   Completed
@@ -51,10 +52,10 @@ model User {
 model Work {
   id                 Int           @id @default(autoincrement())
   description        String
-  mainImageUrl       String        @map("main_image_url")
-  mainImageKey       String        @map("main_image_key")
-  firstAvailableDate DateTime      @map("first_available_date") @db.Timestamp(0)
-  lastAvailableDate  DateTime      @map("last_available_date") @db.Timestamp(0)
+  cardImageUrl       String        @map("card_image_url")
+  cardImagePublicId  String        @map("card_image_public_id")
+  firstAvailableDate DateTime      @map("first_available_date") @db.Date
+  lastAvailableDate  DateTime      @map("last_available_date") @db.Date
   createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
   deletedAt          DateTime?     @map("deleted_at") @db.Timestamp(0)
@@ -69,7 +70,7 @@ model Work {
 model WorkImage {
   id        Int      @id @default(autoincrement())
   imageUrl  String   @map("image_url")
-  publicKey String   @map("public_key")
+  publicId  String   @map("public_id")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
   work      Work     @relation(fields: [workId], references: [id])
@@ -82,12 +83,11 @@ model WorkRequest {
   id                Int           @id @default(autoincrement())
   status            RequestStatus @default(Pending)
   description       String?
-  date              DateTime      @db.Timestamp(0)
+  date              DateTime      @db.Date
   clientMobile      String        @map("client_mobile")
   clientSocialMedia String?       @map("client_social_media")
   createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
-  deletedAt         DateTime?     @map("deleted_at") @db.Timestamp(0)
   user              User          @relation(fields: [clientId], references: [id])
   clientId          Int
   work              Work          @relation(fields: [workId], references: [id])

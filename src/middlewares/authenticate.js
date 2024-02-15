@@ -16,7 +16,6 @@ const authenticate = catchAsync(async (req, res, next) => {
   if (!user) {
     createError("user not found", 401);
   }
-
   delete user.password;
   req.user = user;
   next();
