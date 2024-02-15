@@ -18,7 +18,18 @@ exports.findWorkAndWorkImageByWorkId = (id) =>
 
 exports.findAllWorks = () =>
   prisma.work.findMany({
+    where: {
+      deletedAt: null,
+    },
     orderBy: {
       createdAt: "desc",
+    },
+  });
+
+exports.findWorksByPhotographerId = (photographerId) =>
+  prisma.work.findMany({
+    where: {
+      photographerId,
+      deletedAt: null,
     },
   });

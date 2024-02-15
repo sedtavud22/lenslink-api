@@ -53,7 +53,15 @@ RESPONSE
 GET /works          Get all works
 RESPONSE
   200 { works: [work object]}
+  500 { message: 'internal server error'} 
+
+GET /works/me       GET works by photographer id
+HEADER
+  AUTHORIZATION     Bearer [JWT] 
+RESPONSE
+  200 { works: [work object]}
   401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
   500 { message: 'internal server error'} 
 
 POST    /requests/works/:workId           send work request
@@ -66,6 +74,25 @@ HEADER
 RESPONSE
   200 { request: {request object}}
   400 { message: 'invalid work status'}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}
+
+GET     /requests/works     Get all requests (not completed)
+HEADER
+  AUTHORIZATION     Bearer [JWT]
+RESPONSE
+  200 { request: {request object with client obj & photographer obj}}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}
+
+
+GET     /requests/works/completed   Get all completed requests
+HEADER
+  AUTHORIZATION     Bearer [JWT]
+RESPONSE
+  200 { request: {request object with client obj & photographer obj}}
   401 { message: 'unauthenticated'}
   403 { message: 'cannot accept your request'}
   500 { message: 'internal server error'}

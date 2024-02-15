@@ -26,5 +26,11 @@ router.post(
   workController.createWork
 );
 router.get("/", workController.getAllWorks);
+router.get(
+  "/me",
+  authenticate,
+  validatePhotographer,
+  workController.getWorksByPhotographerId
+);
 
 module.exports = router;

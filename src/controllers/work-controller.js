@@ -49,3 +49,8 @@ exports.getAllWorks = catchAsync(async (req, res, next) => {
   const works = await workService.findAllWorks();
   res.status(200).json({ works });
 });
+
+exports.getWorksByPhotographerId = catchAsync(async (req, res, next) => {
+  const works = await workService.findWorksByPhotographerId(req.user.id);
+  res.status(200).json({ works });
+});
