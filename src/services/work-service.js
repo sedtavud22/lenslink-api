@@ -24,6 +24,9 @@ exports.findAllWorks = () =>
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      user: true,
+    },
   });
 
 exports.findWorksByPhotographerId = (photographerId) =>
