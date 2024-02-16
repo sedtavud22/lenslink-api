@@ -50,9 +50,39 @@ RESPONSE
   403 { message: 'cannot accept your request'}
   500 { message: 'internal server error'}
 
+PATCH /works/:workId/update         update/edit work
+HEADER
+  AUTHORIZATION              Bearer [JWT]     
+REQUEST BODY        multipart/form-data
+  description         String
+  firstAvailableDate  Date
+  lastAvailableDate   Date
+  imageUrl            String (at least one image)  
+  imageName           String (at least one image)
+RESPONSE
+  201 { work: new work object}
+  400 { message: 'invalid input'}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}
+
+PATCH /works/:workId/delete     delete work
+HEADER
+  AUTHORIZATION              Bearer [JWT]
+RESPONSE
+  201 { work: new work object}
+  401 { message: 'unauthenticated'}
+  403 { message: 'cannot accept your request'}
+  500 { message: 'internal server error'}
+
 GET /works          Get all works
 RESPONSE
   200 { works: [work object]}
+  500 { message: 'internal server error'} 
+
+GET /works/:workId  Get work by work id
+RESPONSE
+  200 { work: {work object with work req objs & photographer user obj associated with work }}
   500 { message: 'internal server error'} 
 
 GET /works/me       GET works by photographer id

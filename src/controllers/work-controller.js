@@ -41,7 +41,9 @@ exports.createWork = catchAsync(async (req, res, next) => {
   }
   await workImageService.createWorkImage(imgData);
 
-  const work = await workService.findWorkAndWorkImageByWorkId(newWork.id);
+  const work = await workService.findWorkAndWorkImageAndWorkRequestAndUserById(
+    newWork.id
+  );
   res.status(201).json({ work });
 });
 
@@ -50,7 +52,35 @@ exports.getAllWorks = catchAsync(async (req, res, next) => {
   res.status(200).json({ works });
 });
 
+exports.getWorkAndWorkRequestAndUserByWorkId = catchAsync(
+  async (req, res, next) => {
+    const work =
+      await workService.findWorkAndWorkImageAndWorkRequestAndUserById(
+        +req.params.workId
+      );
+    res.status(200).json({ work });
+  }
+);
+
 exports.getWorksByPhotographerId = catchAsync(async (req, res, next) => {
   const works = await workService.findWorksByPhotographerId(req.user.id);
+  res.status(200).json({ works });
+});
+
+exports.updateWork = catchAsync(async (req, res, next) => {});
+
+exports.deleteWork = catchAsync(async (req, res, next) => {
+  const existingOwnWork = await workService.findWorkByWorkIdAndPhotographerId(
+    +req.params.workId,
+    req.user.id
+  );
+
+  if (!existingOwnWork) {
+    createError("work not found", 400);
+  }
+
+  await workService.deleteWorkByWorkId(+req.params.workId, new Date());
+
+  const works = await workService.findAllWorks();
   res.status(200).json({ works });
 });

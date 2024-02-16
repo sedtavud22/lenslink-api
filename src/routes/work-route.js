@@ -26,11 +26,24 @@ router.post(
   workController.createWork
 );
 router.get("/", workController.getAllWorks);
+router.get("/:workId", workController.getWorkAndWorkRequestAndUserByWorkId);
 router.get(
   "/me",
   authenticate,
   validatePhotographer,
   workController.getWorksByPhotographerId
+);
+router.patch(
+  "/:workId/update",
+  authenticate,
+  validatePhotographer,
+  workController.updateWork
+);
+router.patch(
+  "/:workId/delete",
+  authenticate,
+  validatePhotographer,
+  workController.deleteWork
 );
 
 module.exports = router;

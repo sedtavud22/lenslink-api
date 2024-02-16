@@ -4,15 +4,21 @@ exports.createWork = (data) => prisma.work.create({ data });
 
 exports.findWorkById = (id) => prisma.work.findUnique({ where: { id } });
 
-exports.findWorkAndWorkImageByWorkId = (id) =>
+exports.findWorkByWorkIdAndPhotographerId = (id, photographerId) =>
+  prisma.work.findFirst({
+    where: {
+      id,
+      photographerId,
+    },
+  });
+
+exports.findWorkAndWorkImageAndWorkRequestAndUserById = (id) =>
   prisma.work.findUnique({
     where: { id },
     include: {
-      workImages: {
-        where: {
-          workId: id,
-        },
-      },
+      workImages: true,
+      user: true,
+      workRequests: true,
     },
   });
 
@@ -26,6 +32,7 @@ exports.findAllWorks = () =>
     },
     include: {
       user: true,
+      workRequests: true,
     },
   });
 
@@ -34,5 +41,13 @@ exports.findWorksByPhotographerId = (photographerId) =>
     where: {
       photographerId,
       deletedAt: null,
+    },
+  });
+
+exports.deleteWorkByWorkId = (id, deletedAt) =>
+  prisma.work.update({
+    where: { id },
+    data: {
+      deletedAt,
     },
   });

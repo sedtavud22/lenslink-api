@@ -3,7 +3,12 @@ const { validate } = require("./validator");
 
 const requestSchema = Joi.object({
   description: Joi.string(),
-  date: Joi.date().required().messages({ "date.base": "Invalid date" }),
+  date: Joi.date()
+    .required()
+    .messages({
+      "date.base": "Invalid date",
+      "any.required": "Date is required",
+    }),
   clientMobile: Joi.string()
     .pattern(/^[0-9]{10}$/)
     .required()
