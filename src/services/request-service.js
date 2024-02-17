@@ -59,6 +59,57 @@ exports.findOngoingRequestByClientIdAndWorkId = (clientId, workId) =>
     },
   });
 
+exports.findRequestsByClientId = (clientId) =>
+  prisma.workRequest.findMany({
+    where: {
+      clientId,
+      work: {
+        deletedAt: null,
+      },
+    },
+    include: {
+      user: true,
+      work: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+exports.findRequestsByPhotographerId = (photographerId) =>
+  prisma.workRequest.findMany({
+    where: {
+      work: {
+        photographerId,
+        deletedAt: null,
+      },
+    },
+    include: {
+      user: true,
+      work: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
+exports.findRequestByRequestId = (id) =>
+  prisma.workRequest.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      user: true,
+      work: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+
 exports.createRequest = (data) => prisma.workRequest.create({ data });
 
 exports.updateRequestStatus = (status, id) =>

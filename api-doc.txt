@@ -108,21 +108,18 @@ RESPONSE
   403 { message: 'cannot accept your request'}
   500 { message: 'internal server error'}
 
-GET     /requests/works     Get all requests (not completed)
+GET     /requests/user/:userId     Get requests by user id
 HEADER
   AUTHORIZATION     Bearer [JWT]
 RESPONSE
-  200 { request: {request object with client obj & photographer obj}}
-  401 { message: 'unauthenticated'}
-  403 { message: 'cannot accept your request'}
+  200 { requests: [array of request objs]}
   500 { message: 'internal server error'}
 
 
-GET     /requests/works/completed   Get all completed requests
+GET     /requests/:requestId   Get request by request id
 HEADER
   AUTHORIZATION     Bearer [JWT]
 RESPONSE
   200 { request: {request object with client obj & photographer obj}}
   401 { message: 'unauthenticated'}
-  403 { message: 'cannot accept your request'}
   500 { message: 'internal server error'}

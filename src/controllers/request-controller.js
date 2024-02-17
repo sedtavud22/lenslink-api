@@ -1,5 +1,6 @@
-const { REQUEST_STATUS } = require("../constants");
+const { REQUEST_STATUS, USER_ROLE } = require("../constants");
 const requestService = require("../services/request-service");
+const userService = require("../services/user-service");
 const workService = require("../services/work-service");
 const catchAsync = require("../utils/catch-async");
 const createError = require("../utils/create-error");
@@ -117,5 +118,28 @@ exports.completeRequest = catchAsync(async (req, res, next) => {
     REQUEST_STATUS.Completed,
     pendingRequest.id
   );
+  res.status(200).json({ request });
+});
+
+exports.getRequestsByUserId = catchAsync(async (req, res, next) => {
+  const paramsUser = await userService.findUserById(+req.params.userId);
+
+  if (paramsUser.role === USER_ROLE.Photographer) {
+    const requests = await requestService.findRequestsByPhotographerId(
+      +req.params.userId
+    );
+    res.status(200).json({ requests });
+  }
+
+  if (paramsUser.role === USER_ROLE.Client) {
+    const requests = await requestService.findRequestsByClientId(
+      +req.params.userId
+    );
+    res.status(200).json({ requests });
+  }
+});
+
+exports.getRequestByRequestId = catchAsync(async (req, res, next) => {
+  const request = await requestService.findRequestByRequestId();
   res.status(200).json({ request });
 });

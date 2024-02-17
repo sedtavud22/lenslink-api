@@ -8,6 +8,7 @@ const error = require("./middlewares/error");
 const notFound = require("./middlewares/not-found");
 
 const authRoute = require("./routes/auth-route");
+const userRoute = require("./routes/user-route");
 const workRoute = require("./routes/work-route");
 const requestRoute = require("./routes/request-route");
 const authenticate = require("./middlewares/authenticate");
@@ -21,6 +22,7 @@ app.use(morgan("dev"));
 app.use("/public", express.static("public"));
 
 app.use("/auth", authRoute);
+app.use("/users", userRoute);
 app.use("/works", workRoute);
 app.use("/requests", authenticate, requestRoute);
 
