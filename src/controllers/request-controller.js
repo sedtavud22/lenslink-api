@@ -140,6 +140,8 @@ exports.getRequestsByUserId = catchAsync(async (req, res, next) => {
 });
 
 exports.getRequestByRequestId = catchAsync(async (req, res, next) => {
-  const request = await requestService.findRequestByRequestId();
+  const request = await requestService.findRequestByRequestId(
+    +req.params.requestId
+  );
   res.status(200).json({ request });
 });

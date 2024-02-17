@@ -93,6 +93,9 @@ exports.findRequestsByPhotographerId = (photographerId) =>
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
 exports.findRequestByRequestId = (id) =>
