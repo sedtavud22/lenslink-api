@@ -9,15 +9,21 @@ const {
 const {
   validateRequest,
 } = require("../middlewares/validator/validate-request");
+const authenticate = require("../middlewares/authenticate");
+const { checkExistingUser } = require("../controllers/user-controller");
 
 const router = express.Router();
 const subRouter = express.Router({ mergeParams: true });
 
-router.get("/user/:userId", requestController.getRequestsByUserId);
+router.get(
+  "/user/:userId",
+  checkExistingUser,
+  requestController.getRequestsByUserId
+);
 router.get("/:requestId", requestController.getRequestByRequestId);
 
 router.use("/works/:workId", subRouter);
-subRouter.use(validateWorkId, workController.checkExistingWork);
+subRouter.use(authenticate, validateWorkId, workController.checkExistingWork);
 
 subRouter.post(
   "/",
