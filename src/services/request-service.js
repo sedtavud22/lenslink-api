@@ -94,7 +94,7 @@ exports.findRequestsByPhotographerId = (photographerId) =>
       },
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
   });
 
@@ -122,5 +122,13 @@ exports.updateRequestStatus = (status, id) =>
     },
     where: {
       id,
+    },
+    include: {
+      user: true,
+      work: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
