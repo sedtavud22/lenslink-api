@@ -26,6 +26,9 @@ exports.findAllWorks = () =>
   prisma.work.findMany({
     where: {
       deletedAt: null,
+      lastAvailableDate: {
+        gt: new Date(),
+      },
     },
     orderBy: {
       createdAt: "desc",
