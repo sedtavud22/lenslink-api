@@ -31,7 +31,7 @@ exports.findAllWorks = () =>
       },
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
     include: {
       user: true,
@@ -44,6 +44,16 @@ exports.findWorksByPhotographerId = (photographerId) =>
     where: {
       photographerId,
       deletedAt: null,
+    },
+  });
+
+exports.updateWorkByWorkId = (data, id) =>
+  prisma.work.update({
+    where: { id },
+    data,
+    include: {
+      user: true,
+      workRequests: true,
     },
   });
 

@@ -21,6 +21,7 @@ const workSchema = Joi.object({
       "any.required": "Last available date is required",
     }),
   cardImage: Joi.string(),
+  deletedOldSubImagesId: Joi.any(),
 });
 
 const workIdSchema = Joi.object({

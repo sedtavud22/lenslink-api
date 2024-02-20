@@ -37,6 +37,11 @@ router.patch(
   "/:workId/update",
   authenticate,
   validatePhotographer,
+  upload.fields([
+    { name: "cardImage", maxCount: 1 },
+    { name: "subImages", maxCount: 3 },
+  ]),
+  validateCreateWork,
   workController.updateWork
 );
 router.patch(
