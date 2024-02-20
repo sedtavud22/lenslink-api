@@ -34,6 +34,20 @@ RESPONSE
 401 { message: 'unauthenticated'}
 500 { message: 'internal server error'}
 
+GET /users/:userId  get user data by id
+RESPONSE
+200 { user: {user obj without password} }
+500 { message: 'internal server error'}
+
+PATCH /users        update user by id
+HEADER
+  AUTHORIZATION     Bearer [JWT]
+RESPONSE
+200 { user: {user obj without password} }
+400 { message: 'invalid input'}
+401 { message: 'unauthenticated'}
+500 { message: 'internal server error'}
+
 POST /works         Create new work
 HEADER
   AUTHORIZATION     Bearer [JWT]     

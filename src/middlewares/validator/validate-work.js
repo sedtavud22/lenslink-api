@@ -20,7 +20,8 @@ const workSchema = Joi.object({
         "Last available date must be later than first available date",
       "any.required": "Last available date is required",
     }),
-}).unknown(true);
+  cardImage: Joi.string(),
+});
 
 const workIdSchema = Joi.object({
   workId: Joi.number().positive().required(),

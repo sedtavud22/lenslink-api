@@ -30,21 +30,22 @@ enum RequestStatus {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  firstName    String        @map("first_name")
-  lastName     String        @map("last_name")
-  email        String        @unique
-  password     String
-  gender       Gender
-  role         Role
-  profileImage String?       @map("profile_image")
-  profileInfo  String?
-  province     String
-  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
-  works        Work[]
-  workRequests WorkRequest[]
-  reviews      Review[]
+  id                    Int           @id @default(autoincrement())
+  firstName             String        @map("first_name")
+  lastName              String        @map("last_name")
+  email                 String        @unique
+  password              String
+  gender                Gender
+  role                  Role
+  profileImage          String?       @map("profile_image")
+  profileImagePublicKey String?       @map("profile_image_public_key")
+  profileInfo           String?
+  province              String
+  createdAt             DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt             DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  works                 Work[]
+  workRequests          WorkRequest[]
+  reviews               Review[]
 
   @@map("users")
 }
