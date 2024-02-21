@@ -39,8 +39,8 @@ exports.createWork = catchAsync(async (req, res, next) => {
       });
       fs.unlink(file.path);
     }
+    await workImageService.createWorkImage(imgData);
   }
-  await workImageService.createWorkImage(imgData);
 
   const work = await workService.findWorkAndWorkImageAndWorkRequestAndUserById(
     newWork.id
@@ -94,23 +94,23 @@ exports.updateWork = catchAsync(async (req, res, next) => {
     const deletedSubImagePublicIds = deletedSubImages.map(
       (subImage) => subImage.publicId
     );
-
-    const imgData = [];
-    if (req.files.subImages) {
-      for (const file of req.files.subImages) {
-        const result = await uploadService.upload(file.path);
-        imgData.push({
-          imageUrl: result.secure_url,
-          publicId: result.public_id,
-          workId: +req.params.workId,
-        });
-        fs.unlink(file.path);
-      }
-    }
-    await workImageService.createWorkImage(imgData);
     await workImageService.deleteWorkImagesByArrayOfId(deletedSubImagesId);
 
     await destroyService.destroyMany(deletedSubImagePublicIds);
+  }
+
+  if (req.files.subImages) {
+    const imgData = [];
+    for (const file of req.files.subImages) {
+      const result = await uploadService.upload(file.path);
+      imgData.push({
+        imageUrl: result.secure_url,
+        publicId: result.public_id,
+        workId: +req.params.workId,
+      });
+      fs.unlink(file.path);
+    }
+    await workImageService.createWorkImage(imgData);
   }
 
   delete req.body.deletedOldSubImagesId;
